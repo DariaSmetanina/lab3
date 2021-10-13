@@ -12,6 +12,7 @@ public class PlayerHandler implements iKPIC_subscribeHandler2 {
     SmartSpaceKPI kpi;
 
     String name;
+    String somedata;
 
     PlayerHandler(String nm) throws SmartSpaceException {
         kpi=new SmartSpaceKPI("127.0.0.1", 10010, "y");
@@ -23,7 +24,24 @@ public class PlayerHandler implements iKPIC_subscribeHandler2 {
     @Override
     public void kpic_RDFEventHandler(Vector<Vector<String>> vector, Vector<Vector<String>> vector1, String s, String s1) {
         for (Vector<String> data : vector) {
-            //logic goes here
+            if(data.get(0).equals(name) && data.get(1).equals("serve")){
+                try {
+                    somedata = "Sensor data";
+                    GetInfoHowToServe(somedata);
+                    kpi.insert(new SmartSpaceTriple(name,"try_win", "point"));
+                } catch (SmartSpaceException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if (!data.get(0).equals(name) && data.get(1).equals("serve")){
+                try {
+                    somedata = "Sensor data";
+                    GetInfoHowToSave(somedata);
+                    kpi.insert(new SmartSpaceTriple(name,"try_save", "point"));
+                } catch (SmartSpaceException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -40,6 +58,13 @@ public class PlayerHandler implements iKPIC_subscribeHandler2 {
     @Override
     public void kpic_ExceptionEventHandler(Throwable throwable) {
 
+    }
+
+    public void GetInfoHowToServe(String data){
+        /* TODO */
+    }
+    public void GetInfoHowToSave(String data){
+        /* TODO */
     }
 }
 
