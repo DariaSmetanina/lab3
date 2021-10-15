@@ -11,6 +11,7 @@ public class RefereeHandler implements iKPIC_subscribeHandler2 {
     SmartSpaceKPI kpi;
     private Player player1;
     private Player player2;
+    private String result;
 
     RefereeHandler(SmartSpaceKPI kp) {
         kpi = kp;
@@ -24,7 +25,7 @@ public class RefereeHandler implements iKPIC_subscribeHandler2 {
             /// сообщение о готовности, начало игры
             // > user is ready
             // < user serve game
-            if(data.get(1)=="is"){
+            if(data.get(1).equals("is")){
                 if(!player1.isReady()){
                     player1.setName(data.get(0));
                     player1.setReady();
@@ -43,7 +44,7 @@ public class RefereeHandler implements iKPIC_subscribeHandler2 {
                         userName= player2.getName();
                     }
                     try {
-                        kpi.insert(new SmartSpaceTriple(userName,"start","game"));
+                        kpi.insert(new SmartSpaceTriple(userName,"serve","game"));
                     } catch (SmartSpaceException e) {
                         e.printStackTrace();
                     }
@@ -54,10 +55,10 @@ public class RefereeHandler implements iKPIC_subscribeHandler2 {
             // < user serve game
             /// остановка игры 11+
             // < user wins game
-            if(data.get(1)=="try_save"){
+            if(data.get(1).equals("try_save")){
                 SmartSpaceTriple tri = watchGame();
                 try {
-                    kpi.remove(new SmartSpaceTriple(tri.getSubject(),"serve","game"));
+                    kpi.remove(new SmartSpaceTriple(null,"serve","game"));
                     kpi.insert(tri);
                 } catch (SmartSpaceException e) {
                     e.printStackTrace();
@@ -69,11 +70,10 @@ public class RefereeHandler implements iKPIC_subscribeHandler2 {
 
     private SmartSpaceTriple watchGame(){
         int randomNumber=((int)(Math.random() * (102)));
-        SmartSpaceTriple result;
         String subj="";
         String prdc="serve";
         String obj="game";
-        if(randomNumber/2==1){
+        if(randomNumber%2==1){
             if(player1.increaseScore()){
                 subj=player2.getName();
             }
@@ -81,9 +81,11 @@ public class RefereeHandler implements iKPIC_subscribeHandler2 {
                 subj=player1.getName();
                 prdc="wins";
                 obj="game";
+                result = player1.score+":"+player2.score +" "+ subj +" "+ prdc;
+                System.out.println(result);
             }
         }
-        if(randomNumber/2==0){
+        if(randomNumber%2==0){
             if(player2.increaseScore()){
                 subj=player1.getName();
             }
@@ -91,8 +93,11 @@ public class RefereeHandler implements iKPIC_subscribeHandler2 {
                 subj=player2.getName();
                 prdc="wins";
                 obj="game";
+                result = player1.score+":"+player2.score +" "+ subj +" "+ prdc;
+                System.out.println(result);
             }
         }
+        System.out.println(subj + prdc + obj);
         return new SmartSpaceTriple(subj, prdc, obj);
     }
 
@@ -141,6 +146,10 @@ public class RefereeHandler implements iKPIC_subscribeHandler2 {
     @Override
     public void kpic_ExceptionEventHandler(Throwable throwable) {
 
+    }
+
+    public String getResults(){
+        return result;
     }
 
 }

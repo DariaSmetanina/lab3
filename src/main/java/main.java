@@ -33,7 +33,7 @@ public class main {
             kp1.unsubscribe(subscrAll, true);
 
             kp1.leave();
-
+            System.out.println(server.getResults());
             System.out.println("end");
         } catch (SmartSpaceException e) {
             e.printStackTrace();

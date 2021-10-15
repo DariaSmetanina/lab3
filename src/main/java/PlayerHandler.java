@@ -28,6 +28,7 @@ public class PlayerHandler implements iKPIC_subscribeHandler2 {
                 try {
                     somedata = "Sensor data";
                     GetInfoHowToServe(somedata);
+                    kpi.remove(new SmartSpaceTriple(null,"try_win", "point"));
                     kpi.insert(new SmartSpaceTriple(name,"try_win", "point"));
                 } catch (SmartSpaceException e) {
                     e.printStackTrace();
@@ -37,6 +38,7 @@ public class PlayerHandler implements iKPIC_subscribeHandler2 {
                 try {
                     somedata = "Sensor data";
                     GetInfoHowToSave(somedata);
+                    kpi.remove(new SmartSpaceTriple(null,"try_save", "point"));
                     kpi.insert(new SmartSpaceTriple(name,"try_save", "point"));
                 } catch (SmartSpaceException e) {
                     e.printStackTrace();
